@@ -12,6 +12,57 @@
 
 using namespace dlib;
 
+#ifdef _WIN32  
+int SavePictureToFolder(const std::string& folder_path, const std::string& person_name, const matrix<rgb_pixel>& img, int last_time)
+{
+    if ((CreateDirectoryA(folder_path.c_str(), NULL) ||
+        ERROR_ALREADY_EXISTS == GetLastError()) &&
+        (CreateDirectoryA((folder_path + "\\" + person_name).c_str(), NULL) ||
+            ERROR_ALREADY_EXISTS == GetLastError()))
+    {
+        std::string file_name = ".\\\\" + folder_path + "\\\\" + person_name + "\\\\" + std::to_string(last_time) + ".jpg";
+        save_jpeg(img, file_name);
+    }
+    else {
+        std::cout << GetLastError();
+    }
+
+    return GetLastError();
+}
+
+void init(std::string folder_path)
+{
+    CreateDirectoryA(folder_path.c_str(), NULL);
+}
+
+#endif
+
+#ifdef __linux__   
+int SavePictureToFolder(const std::string& folder_path, const std::string& person_name, const matrix<rgb_pixel>& img, int last_time)
+{
+    int dir_err = mkdir(folder_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if(dir_err == -1)
+    {
+        std::cout << dir_err;
+    }
+
+    dir_err = mkdir((folder_path + "/" + person_name).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if(dir_err == -1)
+    {
+        std::cout << dir_err;
+    }
+    std::string file_name = "./" + folder_path + "/" + person_name + "/" + std::to_string(last_time) + ".jpg";
+    save_jpeg(img, file_name);
+}
+
+void init(std::string folder_path)
+{
+    mkdir(folder_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+}
+
+#endif
+
+
 struct TrainedFace
 {
     std::string name;
@@ -93,17 +144,7 @@ public:
 
         if (clock() - last_time > 100)
         {
-            if ((CreateDirectoryA(folder_path.c_str(), NULL) ||
-                ERROR_ALREADY_EXISTS == GetLastError()) &&
-                (CreateDirectoryA((folder_path + "\\" + person_name).c_str(), NULL) ||
-                    ERROR_ALREADY_EXISTS == GetLastError()))
-            {
-                std::string file_name = ".\\\\" + folder_path + "\\\\" + person_name + "\\\\" + std::to_string(last_time) + ".jpg";
-                save_jpeg(img, file_name);
-            }
-            else {
-                std::cout << GetLastError();
-            }
+            SavePictureToFolder(folder_path, person_name, img, last_time);
 
             last_time = clock();
         }
@@ -117,7 +158,7 @@ public:
         }
     }
 
-    auto detect_faces(const std::string& folder_path, std::vector<matrix<rgb_pixel>>& input_faces, std::vector<std::string>& faces_names)
+    std::vector<std::string> detect_faces(const std::string& folder_path, std::vector<matrix<rgb_pixel>>& input_faces, std::vector<std::string>& faces_names)
     {
         const int num_input_faces = input_faces.size();
         const int num_source_faces = directory(folder_path).get_dirs().size();

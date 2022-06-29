@@ -12,11 +12,6 @@ using namespace std;
 
 const string faces_folder = "faces_to_train";
 
-void init(string folder_path)
-{
-    CreateDirectoryA(folder_path.c_str(), NULL);
-}
-
 int main() try
 {
     init(faces_folder);
@@ -32,7 +27,6 @@ int main() try
             cin.get();
             return 1;
         }
-        
     }
 
     main_window win;
