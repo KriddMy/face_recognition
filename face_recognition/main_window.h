@@ -189,7 +189,7 @@ public:
         rtemp.reserve(objects.size());
         for (unsigned long i = 0; i < objects.size(); ++i)
         {
-            rtemp.push_back(overlay_rect(objects[i].get_rect(), rgb_pixel(255, 0, 0)));
+            rtemp.push_back(overlay_rect(objects[i].get_rect(), rgb_pixel(255, 0, 0), part_names[i]));
         }
 
         add_overlay(rtemp);
@@ -203,7 +203,7 @@ public:
                 if (objects[i].part(j) != OBJECT_PART_NOT_PRESENT)
                 {
                     if (j < part_names.size())
-                        temp.push_back(overlay_circle(objects[i].part(j), 7, rgb_pixel(0, 255, 0), part_names[j]));
+                        temp.push_back(overlay_circle(objects[i].part(j), 7, rgb_pixel(0, 255, 0)));
                     else
                         temp.push_back(overlay_circle(objects[i].part(j), 7, rgb_pixel(0, 255, 0)));
                 }
