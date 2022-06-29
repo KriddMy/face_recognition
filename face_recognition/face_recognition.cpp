@@ -54,16 +54,15 @@ int main() try
         std::vector<full_object_detection>shapes;
         shapes = recognizer.get_faces_chips(faces, img);
 
+        win.clear_overlay();
         if (faces.size() == 0)
         {
             cout << "No faces found in image!" << endl;
-            win.clear_overlay();
             continue;
         }
 
         if (win.IsAdding)
         {
-            win.clear_overlay();
             win.add_overlay(shapes);
 
             cout << "saving photo \n";
@@ -78,8 +77,9 @@ int main() try
             win.add_overlay(shapes, names);
         }
     }
-    cin.get();
+    //cin.get();
 }
+
 catch (std::exception& e)
 {
     cout << e.what() << endl;

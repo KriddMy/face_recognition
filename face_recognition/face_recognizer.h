@@ -37,7 +37,7 @@ void init(std::string folder_path)
 
 #endif
 
-#ifdef __linux__   
+#ifdef __linux__
 int SavePictureToFolder(const std::string& folder_path, const std::string& person_name, const matrix<rgb_pixel>& img, int last_time)
 {
     int dir_err = mkdir(folder_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
@@ -63,7 +63,7 @@ void init(std::string folder_path)
 #endif
 
 
-struct TrainedFace
+struct database_face
 {
     std::string name;
     std::vector<matrix<rgb_pixel>> images;
@@ -163,7 +163,7 @@ public:
         const int num_input_faces = input_faces.size();
         const int num_source_faces = directory(folder_path).get_dirs().size();
         matrix<rgb_pixel> img;
-        std::vector<TrainedFace> sourceFaces;
+        std::vector<database_face> sourceFaces;
         sourceFaces.reserve(num_source_faces);
         faces_names.reserve(num_input_faces);
         
@@ -172,13 +172,13 @@ public:
 
         for (int i = 0; i < num_source_faces; i++)
         {
-            TrainedFace face;
+            database_face face;
             auto subdir = directory(folder_path).get_dirs()[i];
             auto files = subdir.get_files();
 
             face.name = subdir.name();
             face.images.reserve(num_pictures_per_person);
-
+    
             for (int j = 0; j < num_pictures_per_person; j++)
             {
                 auto file = files[std::rand() % subdir.get_files().size()];
@@ -208,8 +208,8 @@ public:
 
         for (int i = 0; i < num_input_faces; i++)
         {
-            unsigned long num_itarations = 0;
-            unsigned long average_label = 0;
+            std::unordered_map<unsigned long, unsigned long> detections_count;
+            detections_count.reserve(labels.size());
 
             const unsigned long current_label = labels[i];
             
@@ -217,21 +217,39 @@ public:
             {
                 if (labels[j] == current_label)
                 {
-                    average_label += ((j - num_input_faces) / num_pictures_per_person) + 1;
-                    num_itarations++;
+                    auto match_face_id = ((j - num_input_faces) / num_pictures_per_person) + 1;
+                    detections_count[match_face_id]++;
                 }
             }
 
-            if (num_itarations != 0)
-                average_label = roundf(average_label / num_itarations);
-
-            if (average_label == 0)
+            if (detections_count.size() == 0)
             {
                 faces_names.insert(faces_names.begin() + i, "");
             }
             else
             {
-                faces_names.insert(faces_names.begin() + i, sourceFaces[average_label - 1].name);
+                int max = 0;
+                for(auto pair: detections_count)
+                {
+                    if(pair.second > max)
+                    {
+                        max = pair.second;
+                    }
+                }
+
+                std::list<unsigned long> detected_faces_ids;
+                for(auto pair: detections_count)
+                {
+                    if(pair.second == max)
+                    {
+                        detected_faces_ids.push_front(pair.first);
+                    }
+                }
+
+                if(detected_faces_ids.size() > 1)
+                    faces_names.insert(faces_names.begin() + i, "unknown");
+                else
+                    faces_names.insert(faces_names.begin() + i, sourceFaces[detected_faces_ids.front() - 1].name);
             }
         }
 
