@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/kriddmy/Documents/face_recognition/face_recognition/build/src",
-  "command": "/usr/bin/c++ -DDLIB_USE_CUDA=1 -I/home/kriddmy/Documents/face_recognition/face_recognition/include -isystem /usr/local/include/opencv4 -g -std=gnu++17 -Wreturn-type -o CMakeFiles/face_recognition.dir/face_recognition.cpp.o -c /home/kriddmy/Documents/face_recognition/face_recognition/src/face_recognition.cpp",
-  "file": "/home/kriddmy/Documents/face_recognition/face_recognition/src/face_recognition.cpp",
-  "output": "src/CMakeFiles/face_recognition.dir/face_recognition.cpp.o"
-}
-]
