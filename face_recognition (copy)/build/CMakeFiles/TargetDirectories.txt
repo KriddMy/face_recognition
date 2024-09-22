@@ -1,5 +1,0 @@
-/home/kriddmy/Documents/face_recognition/face_recognition (copy)/build/CMakeFiles/edit_cache.dir
-/home/kriddmy/Documents/face_recognition/face_recognition (copy)/build/CMakeFiles/rebuild_cache.dir
-/home/kriddmy/Documents/face_recognition/face_recognition (copy)/build/src/CMakeFiles/face_recognition.dir
-/home/kriddmy/Documents/face_recognition/face_recognition (copy)/build/src/CMakeFiles/edit_cache.dir
-/home/kriddmy/Documents/face_recognition/face_recognition (copy)/build/src/CMakeFiles/rebuild_cache.dir
