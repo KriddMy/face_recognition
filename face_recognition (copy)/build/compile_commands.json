@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/kriddmy/Documents/face_recognition/face_recognition (copy)/build",
+  "command": "/usr/bin/c++ -I\"/home/kriddmy/Documents/face_recognition/face_recognition (copy)/include\" -isystem /usr/include/opencv4 -g -o src/CMakeFiles/face_recognition.dir/face_recognition.cpp.o -c \"/home/kriddmy/Documents/face_recognition/face_recognition (copy)/src/face_recognition.cpp\"",
+  "file": "/home/kriddmy/Documents/face_recognition/face_recognition (copy)/src/face_recognition.cpp"
+}
+]
